@@ -1,17 +1,30 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+  TouchableNativeFeedback
+} from "react-native";
 
 const CategoryGridTile = props => {
+  let TouchableCmp = TouchableOpacity;
+  if (Platform.OS == "android" && Platform.Version >= 21) {
+    TouchableCmp = TouchableNativeFeedback;
+  }
   return (
-    <TouchableOpacity style={styles.gridItem} onPress={props.onSelect}>
-      <View
-        style={{ ...styles.container, ...{ backgroundColor: props.color } }}
-      >
-        <Text style={styles.title} numberOfLines={2}>
-          {props.title}
-        </Text>
-      </View>
-    </TouchableOpacity>
+    <View style={styles.gridItem}>
+      <TouchableCmp style={styles.touchable} onPress={props.onSelect}>
+        <View
+          style={{ ...styles.container, ...{ backgroundColor: props.color } }}
+        >
+          <Text style={styles.title} numberOfLines={2}>
+            {props.title}
+          </Text>
+        </View>
+      </TouchableCmp>
+    </View>
   );
 };
 
@@ -19,7 +32,12 @@ const styles = StyleSheet.create({
   gridItem: {
     flex: 1,
     margin: 15,
-    height: 150
+    height: 150,
+    borderRadius: 10,
+    overflow: "hidden"
+  },
+  touchable: {
+    flex: 1
   },
   container: {
     flex: 1,
@@ -35,7 +53,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "open-sans-bold",
-    fontSize: 22
+    fontSize: 22,
+    textAlign: "right"
   }
 });
 
